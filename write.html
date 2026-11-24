@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write Post — Ethan Anaya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf9f6;
+      --surface: #f2f0eb;
+      --ink: #161618;
+      --ink-secondary: #52525b;
+      --muted: #71717a;
+      --border: #e4e2db;
+      --accent: #1d4ed8;
+      --accent-hover: #1e40af;
+      --accent-soft: rgba(29, 78, 216, 0.08);
+      --code-bg: #efece6;
+      --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max-w: 680px;
+      --radius: 6px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #111113;
+      --surface: #18181b;
+      --ink: #ececee;
+      --ink-secondary: #a1a1aa;
+      --muted: #82828c;
+      --border: #26262b;
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-soft: rgba(96, 165, 250, 0.12);
+      --code-bg: #1b1b1f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: var(--accent); text-decoration: none; text-underline-offset: 3px; }
+    a:hover { color: var(--accent-hover); text-decoration: underline; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 clamp(18px, 4.5vw, 32px);
+    }
+
+    /* Header */
+    .site-header { border-bottom: 1px solid var(--border); padding: 20px 0; }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .brand:hover { color: var(--ink); text-decoration: none; }
+    .brand-name { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; letter-spacing: -0.015em; }
+    .brand-sub { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); }
+
+    .nav { display: flex; align-items: center; gap: 18px; }
+    .nav-link {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      text-decoration: none;
+      padding: 4px 0;
+      position: relative;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--ink); text-decoration: none; }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 1.5px;
+      background: var(--accent);
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--ink-secondary);
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-btn:hover { border-color: var(--ink-secondary); color: var(--ink); }
+
+    /* Main */
+    main { flex: 1; padding: 36px 0 64px; }
+
+    .editor-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .editor-head h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .editor-note {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 4px 0 0;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 165px;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .input, .textarea {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 0.94rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .input:focus, .textarea:focus {
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    .textarea {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      min-height: 320px;
+      resize: vertical;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .fmt-btns, .mode-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+    }
+    .btn-ghost:hover { border-color: var(--ink-secondary); color: var(--ink); }
+    .btn-ghost.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 9px 16px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #ffffff;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    [data-theme="dark"] .btn-primary { color: #0b1120; }
+
+    .btn-secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 9px 15px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-secondary:hover { border-color: var(--ink-secondary); text-decoration: none; }
+
+    .editor-preview {
+      min-height: 320px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .prose { font-size: 1.02rem; line-height: 1.75; color: var(--ink); }
+    .prose > *:first-child { margin-top: 0; }
+    .prose h2 { font-family: var(--font-serif); font-size: 1.45rem; margin: 1.6em 0 0.5em; }
+    .prose h3 { font-family: var(--font-serif); font-size: 1.2rem; margin: 1.4em 0 0.4em; }
+    .prose p { margin: 0 0 1.1em; }
+    .prose ul, .prose ol { margin: 0 0 1.1em; padding-left: 1.4em; }
+    .prose blockquote {
+      margin: 1.2em 0;
+      padding: 2px 0 2px 16px;
+      border-left: 2.5px solid var(--accent);
+      color: var(--ink-secondary);
+      font-style: italic;
+    }
+    .prose code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      background: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    .prose pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    .prose pre code { background: none; padding: 0; }
+
+    .filename-preview {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+    .filename-preview code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .steps-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+    }
+    .steps-note ol { margin: 6px 0 0; padding-left: 1.2em; }
+    .steps-note li { margin-bottom: 4px; }
+
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { color: var(--muted); }
+    .footer-links a:hover { color: var(--ink); }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--ink);
+      color: var(--bg);
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      font-size: 0.86rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 560px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .nav { gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-name">Ethan Anaya</span>
+        <span class="brand-sub">/write</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">Posts</a>
+        <a href="write.html" class="nav-link active">Write</a>
+        <a href="https://github.com/EthanDupe/blog" target="_blank" rel="noopener noreferrer" class="nav-link">Repo</a>
+        <button type="button" class="theme-btn" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme"></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="editor-head">
+      <div>
+        <h1>Write a post</h1>
+        <p class="editor-note">Creates a Markdown file ready to drop into your <code>posts/</code> folder.</p>
+      </div>
+      <button type="button" class="btn-ghost" id="clear-draft-btn">Clear draft</button>
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label for="f-title">Title</label>
+        <input id="f-title" class="input" type="text" placeholder="My new post">
+      </div>
+      <div class="field">
+        <label for="f-date">Date</label>
+        <input id="f-date" class="input" type="date">
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label for="f-summary">Summary (optional)</label>
+        <input id="f-summary" class="input" type="text" placeholder="One-line summary">
+      </div>
+      <div class="field">
+        <label for="f-tags">Tags (comma separated)</label>
+        <input id="f-tags" class="input" type="text" placeholder="notes, projects">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="editor-toolbar">
+        <div class="mode-tabs">
+          <button type="button" class="btn-ghost active" data-mode="write">Write</button>
+          <button type="button" class="btn-ghost" data-mode="preview">Preview</button>
+        </div>
+        <div class="fmt-btns" id="fmt-btns">
+          <button type="button" class="btn-ghost" data-fmt="h2">H2</button>
+          <button type="button" class="btn-ghost" data-fmt="bold">Bold</button>
+          <button type="button" class="btn-ghost" data-fmt="italic">Italic</button>
+          <button type="button" class="btn-ghost" data-fmt="code">Code</button>
+          <button type="button" class="btn-ghost" data-fmt="quote">Quote</button>
+          <button type="button" class="btn-ghost" data-fmt="link">Link</button>
+        </div>
+      </div>
+      <textarea id="f-content" class="textarea" placeholder="Write your post in Markdown..."></textarea>
+      <div id="f-preview" class="editor-preview prose" style="display:none"></div>
+    </div>
+
+    <div class="filename-preview">
+      File path: <code id="filename-out">posts/untitled-post.md</code>
+    </div>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-primary" id="download-md-btn">Download .md file</button>
+      <button type="button" class="btn-secondary" id="copy-md-btn">Copy .md text</button>
+      <a href="https://github.com/EthanDupe/blog/new/main/posts" target="_blank" rel="noopener noreferrer" class="btn-secondary">Create in GitHub &rarr;</a>
+    </div>
+
+    <div class="steps-note">
+      <strong>How to publish:</strong>
+      <ol>
+        <li>Click <strong>Copy .md text</strong>, then click <strong>Create in GitHub</strong> (or download the <code>.md</code> file and upload it to <code>posts/</code>).</li>
+        <li>Name the file ending in <code>.md</code> and commit to <code>main</code>. It appears on your blog automatically.</li>
+      </ol>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>&copy; 2026 Ethan Anaya</span>
+      <div class="footer-links">
+        <a href="index.html">Posts</a>
+        <a href="https://github.com/EthanDupe/blog" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const THEME_KEY = 'ethan_blog_theme_v1';
+    const DRAFT_KEY = 'ethan_blog_draft_v2';
+
+    const titleEl = document.getElementById('f-title');
+    const dateEl = document.getElementById('f-date');
+    const summaryEl = document.getElementById('f-summary');
+    const tagsEl = document.getElementById('f-tags');
+    const contentEl = document.getElementById('f-content');
+    const previewEl = document.getElementById('f-preview');
+    const fmtBtns = document.getElementById('fmt-btns');
+    const filenameOut = document.getElementById('filename-out');
+
+    function storageGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function storageSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+    function initTheme() {
+      const saved = storageGet(THEME_KEY);
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      storageSet(THEME_KEY, theme);
+      const btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.innerHTML = theme === 'dark'
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      }
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    function slugify(text) {
+      return String(text || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-') || 'untitled-post';
+    }
+
+    function getFilename() {
+      return `${slugify(titleEl.value)}.md`;
+    }
+
+    function buildMarkdownFile() {
+      const title = titleEl.value.trim() || 'Untitled Post';
+      const date = dateEl.value || new Date().toISOString().slice(0, 10);
+      const tags = tagsEl.value.split(',').map(t => t.trim().toLowerCase().replace(/^#/, '')).filter(Boolean);
+      const summary = summaryEl.value.trim();
+      const body = contentEl.value.trim();
+
+      const lines = ['---', `title: ${title}`, `date: ${date}`];
+      if (tags.length) lines.push(`tags: ${tags.join(', ')}`);
+      if (summary) lines.push(`summary: ${summary}`);
+      lines.push('---', '', body, '');
+      return lines.join('\n');
+    }
+
+    function saveDraft() {
+      filenameOut.textContent = `posts/${getFilename()}`;
+      storageSet(DRAFT_KEY, JSON.stringify({
+        title: titleEl.value,
+        date: dateEl.value,
+        summary: summaryEl.value,
+        tags: tagsEl.value,
+        content: contentEl.value
+      }));
+    }
+
+    function loadDraft() {
+      const today = new Date().toISOString().slice(0, 10);
+      dateEl.value = today;
+      const saved = storageGet(DRAFT_KEY);
+      if (saved) {
+        try {
+          const d = JSON.parse(saved);
+          if (d.title) titleEl.value = d.title;
+          if (d.date) dateEl.value = d.date;
+          if (d.summary) summaryEl.value = d.summary;
+          if (d.tags) tagsEl.value = d.tags;
+          if (d.content) contentEl.value = d.content;
+        } catch (e) {}
+      }
+      filenameOut.textContent = `posts/${getFilename()}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function renderInline(raw) {
+      let s = escapeHtml(raw);
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      return s;
+    }
+
+    function renderPreviewMarkdown(md) {
+      const lines = String(md || '').replace(/\r\n/g, '\n').split('\n');
+      let html = '';
+      let i = 0;
+      while (i < lines.length) {
+        const line = lines[i];
+        if (/^```/.test(line.trim())) {
+          const code = [];
+          i++;
+          while (i < lines.length && !/^```/.test(lines[i].trim())) { code.push(lines[i]); i++; }
+          i++;
+          html += `<pre><code>${escapeHtml(code.join('\n'))}</code></pre>`;
+          continue;
+        }
+        if (!line.trim()) { i++; continue; }
+        const h = line.match(/^(#{1,3})\s+(.+)$/);
+        if (h) { html += `<h${Math.min(3, Math.max(2, h[1].length))}>${renderInline(h[2])}</h${Math.min(3, Math.max(2, h[1].length))}>`; i++; continue; }
+        if (/^>\s?/.test(line)) {
+          const q = [];
+          while (i < lines.length && /^>\s?/.test(lines[i])) { q.push(lines[i].replace(/^>\s?/, '')); i++; }
+          html += `<blockquote><p>${q.map(renderInline).join('<br>')}</p></blockquote>`;
+          continue;
+        }
+        if (/^[-*+]\s+/.test(line)) {
+          html += '<ul>';
+          while (i < lines.length && /^[-*+]\s+/.test(lines[i])) { html += `<li>${renderInline(lines[i].replace(/^[-*+]\s+/, ''))}</li>`; i++; }
+          html += '</ul>';
+          continue;
+        }
+        if (/^\d+\.\s+/.test(line)) {
+          html += '<ol>';
+          while (i < lines.length && /^\d+\.\s+/.test(lines[i])) { html += `<li>${renderInline(lines[i].replace(/^\d+\.\s+/, ''))}</li>`; i++; }
+          html += '</ol>';
+          continue;
+        }
+        const p = [];
+        while (i < lines.length && lines[i].trim() && !/^(#{1,3}\s+|```|>\s?|[-*+]\s+|\d+\.\s+)/.test(lines[i].trim())) { p.push(lines[i]); i++; }
+        html += `<p>${p.map(renderInline).join(' ')}</p>`;
+      }
+      return html || '<p style="color:var(--muted)">Nothing to preview yet.</p>';
+    }
+
+    document.querySelectorAll('[data-mode]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.getAttribute('data-mode');
+        document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b === btn));
+        if (mode === 'preview') {
+          previewEl.innerHTML = renderPreviewMarkdown(contentEl.value);
+          contentEl.style.display = 'none';
+          previewEl.style.display = 'block';
+          fmtBtns.style.display = 'none';
+        } else {
+          contentEl.style.display = 'block';
+          previewEl.style.display = 'none';
+          fmtBtns.style.display = 'flex';
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-fmt]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-fmt');
+        const start = contentEl.selectionStart;
+        const end = contentEl.selectionEnd;
+        const sel = contentEl.value.slice(start, end);
+        let ins = '';
+        if (type === 'h2') ins = `\n## ${sel || 'Heading'}\n`;
+        if (type === 'bold') ins = `**${sel || 'bold text'}**`;
+        if (type === 'italic') ins = `*${sel || 'italic text'}*`;
+        if (type === 'code') ins = sel.includes('\n') ? `\n\`\`\`\n${sel}\n\`\`\`\n` : `\`${sel || 'code'}\``;
+        if (type === 'quote') ins = `\n> ${sel || 'Quote'}\n`;
+        if (type === 'link') ins = `[${sel || 'link text'}](https://example.com)`;
+        contentEl.value = contentEl.value.slice(0, start) + ins + contentEl.value.slice(end);
+        contentEl.focus();
+        contentEl.setSelectionRange(start + ins.length, start + ins.length);
+        saveDraft();
+      });
+    });
+
+    [titleEl, dateEl, summaryEl, tagsEl, contentEl].forEach(el => {
+      el.addEventListener('input', saveDraft);
+    });
+
+    document.getElementById('download-md-btn').addEventListener('click', () => {
+      const md = buildMarkdownFile();
+      const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = getFilename();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast(`Downloaded ${getFilename()}`);
+    });
+
+    document.getElementById('copy-md-btn').addEventListener('click', () => {
+      const md = buildMarkdownFile();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(md).then(() => showToast('Markdown copied')).catch(() => fallbackCopy(md));
+      } else {
+        fallbackCopy(md);
+      }
+    });
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showToast('Markdown copied'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    document.getElementById('clear-draft-btn').addEventListener('click', () => {
+      titleEl.value = '';
+      dateEl.value = new Date().toISOString().slice(0, 10);
+      summaryEl.value = '';
+      tagsEl.value = '';
+      contentEl.value = '';
+      saveDraft();
+      showToast('Draft cleared');
+    });
+
+    initTheme();
+    loadDraft();
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  </script>
+</body>
+</html>
