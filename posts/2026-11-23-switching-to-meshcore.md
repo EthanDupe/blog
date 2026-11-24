@@ -1,6 +1,6 @@
 ---
 title: Why I switched from Meshtastic to MeshCore
-date: 2026-11-23
+date: 2026-11-19
 tags: lora, meshcore, hardware
 summary: Moving my Heltec V3 off Meshtastic and why MeshCore feels a lot cleaner for what I actually want to do.
 ---
