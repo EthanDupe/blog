@@ -7,13 +7,13 @@ summary: Moving my Heltec V3 off Meshtastic and why MeshCore feels a lot cleaner
 
 I've been messing around with LoRa for a while now, and for most of that time I was running Meshtastic on my Heltec V3. It works fine out of the box, but after using it for a bit I decided to switch over to MeshCore and honestly I'm very glad I did.
 
-## What bugged me about Meshtastic
+## What I didnt like about Meshtastic
 
 Meshtastic tries to do a lot of stuff at once. Every node is kind of flooding packets around by default, and once a few people are on the same channel or someone sets their hop limit too high, things get noisy pretty fast. The codebase also feels pretty heavy when you just want to poke around and change how something works on an ESP32.
 
 I mostly just wanted reliable text messaging, clean routing, and firmware that didn't feel too bloated.
 
-## Why MeshCore fits better
+## Why MeshCore is better (for me)
 
 With MeshCore, client nodes and repeaters are actually separate roles. Your node doesn't waste any battery or airtime repeating everyone else's damn traffic unless you explicitly set up a repeater to do that! Messaging feels way better almost quicker and snappier and the whole thing just makes more sense for a local mesh.
 
