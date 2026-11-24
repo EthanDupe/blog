@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethan Anaya — Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf9f6;
+      --surface: #f2f0eb;
+      --ink: #161618;
+      --ink-secondary: #52525b;
+      --muted: #71717a;
+      --border: #e4e2db;
+      --accent: #1d4ed8;
+      --accent-hover: #1e40af;
+      --accent-soft: rgba(29, 78, 216, 0.08);
+      --code-bg: #efece6;
+      --danger: #b91c1c;
+      --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max-w: 680px;
+      --radius: 6px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #111113;
+      --surface: #18181b;
+      --ink: #ececee;
+      --ink-secondary: #a1a1aa;
+      --muted: #82828c;
+      --border: #26262b;
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-soft: rgba(96, 165, 250, 0.12);
+      --code-bg: #1b1b1f;
+      --danger: #f87171;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 clamp(18px, 4.5vw, 32px);
+    }
+
+    /* Header */
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .brand:hover {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-link {
+      background: none;
+      border: none;
+      padding: 4px 0;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 1.5px;
+      background: var(--accent);
+    }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--ink-secondary);
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--ink-secondary);
+      color: var(--ink);
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      padding: 40px 0 64px;
+    }
+
+    /* Filter bar */
+    .controls {
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 36px 9px 36px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .search-input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 4px 6px;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .search-clear.visible {
+      display: inline-flex;
+    }
+
+    .search-clear:hover {
+      color: var(--ink);
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .tag-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 11px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--ink-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .tag-btn:hover {
+      border-color: var(--ink-secondary);
+      color: var(--ink);
+    }
+
+    .tag-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Year groups & Post list */
+    .year-group {
+      margin-bottom: 36px;
+    }
+
+    .year-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .year-label {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin: 0 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .post-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-item:last-child {
+      border-bottom: none;
+    }
+
+    .post-link {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 4px 18px;
+      padding: 16px 0;
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.15s ease;
+    }
+
+    .post-link:hover {
+      text-decoration: none;
+    }
+
+    .post-link:hover .post-title {
+      color: var(--accent);
+    }
+
+    .post-date {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding-top: 4px;
+      white-space: nowrap;
+    }
+
+    .post-title {
+      font-family: var(--font-serif);
+      font-size: 1.24rem;
+      font-weight: 500;
+      line-height: 1.32;
+      color: var(--ink);
+      margin: 0 0 4px;
+      transition: color 0.15s ease;
+    }
+
+    .post-excerpt {
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+      margin: 0 0 8px;
+      line-height: 1.5;
+    }
+
+    .post-meta-inline {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .post-tag-pill {
+      color: var(--ink-secondary);
+    }
+
+    .draft-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+
+    .empty-state {
+      padding: 40px 0;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state p {
+      margin: 0 0 14px;
+    }
+
+    /* Article Reader */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .article-header {
+      margin-bottom: 32px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .article-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.75rem, 4vw, 2.3rem);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin: 0 0 14px;
+    }
+
+    .article-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .article-meta-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .article-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .prose {
+      font-size: 1.04rem;
+      line-height: 1.78;
+      color: var(--ink);
+    }
+
+    .prose > *:first-child {
+      margin-top: 0;
+    }
+
+    .prose h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 2em 0 0.6em;
+      line-height: 1.28;
+      letter-spacing: -0.015em;
+    }
+
+    .prose h3 {
+      font-family: var(--font-serif);
+      font-size: 1.22rem;
+      font-weight: 600;
+      margin: 1.6em 0 0.5em;
+      line-height: 1.35;
+    }
+
+    .prose p {
+      margin: 0 0 1.25em;
+    }
+
+    .prose ul, .prose ol {
+      margin: 0 0 1.25em;
+      padding-left: 1.4em;
+    }
+
+    .prose li {
+      margin-bottom: 0.4em;
+    }
+
+    .prose blockquote {
+      margin: 1.5em 0;
+      padding: 2px 0 2px 18px;
+      border-left: 2.5px solid var(--accent);
+      color: var(--ink-secondary);
+      font-style: italic;
+    }
+
+    .prose hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2em 0;
+    }
+
+    .prose img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      margin: 1.2em 0;
+      display: block;
+    }
+
+    .prose code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      background: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    .code-block {
+      position: relative;
+      margin: 1.4em 0;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .copy-code-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .copy-code-btn:hover {
+      color: var(--ink);
+      background: var(--border);
+    }
+
+    .code-block pre {
+      margin: 0;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+    .code-block pre code {
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .article-footer-nav {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .pager-link {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .pager-link:hover {
+      text-decoration: none;
+    }
+
+    .pager-link:hover .pager-title {
+      color: var(--accent);
+    }
+
+    .pager-link.next {
+      text-align: right;
+      align-items: flex-end;
+    }
+
+    .pager-label {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    .pager-title {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    /* Editor View */
+    .editor-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .editor-head h1 {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .editor-note {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin: 4px 0 0;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .input, .textarea {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 0.94rem;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .input:focus, .textarea:focus {
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    .textarea {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      min-height: 300px;
+      resize: vertical;
+    }
+
+    .editor-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .fmt-btns, .mode-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--ink-secondary);
+      color: var(--ink);
+    }
+
+    .btn-ghost.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 8px 15px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #ffffff;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    [data-theme="dark"] .btn-primary {
+      color: #0b1120;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--ink);
+      transition: border-color 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--ink-secondary);
+    }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      border-color: var(--danger);
+    }
+
+    .editor-preview {
+      min-height: 300px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .confirm-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--danger);
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+    }
+
+    .confirm-bar.visible {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    /* Footer */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 0;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--ink);
+      color: var(--bg);
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      font-size: 0.86rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 560px) {
+      .post-link {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .post-date {
+        padding-top: 0;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .article-footer-nav {
+        grid-template-columns: 1fr;
+      }
+
+      .pager-link.next {
+        text-align: left;
+        align-items: flex-start;
+      }
+
+      .nav {
+        gap: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#/" class="brand" id="brand-link">
+        <span class="brand-name" id="site-title">Ethan Anaya</span>
+        <span class="brand-sub">/blog</span>
+      </a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#/" class="nav-link" data-nav="home">Posts</a>
+        <a href="#/write" class="nav-link" data-nav="write">Write</a>
+        <a href="https://github.com/EthanDupe" target="_blank" rel="noopener noreferrer" class="nav-link" id="main-site-link">GitHub</a>
+        <button type="button" class="theme-btn" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme"></button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="app" aria-live="polite"></main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span id="footer-copy">&copy; 2026 Ethan Anaya</span>
+      <div class="footer-links">
+        <a href="#/" id="footer-posts">Posts</a>
+        <a href="#/write" id="footer-write">Write</a>
+        <a href="https://github.com/EthanDupe" target="_blank" rel="noopener noreferrer" id="footer-github">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    // =========================================================================
+    // SITE CONFIG — Update your main website URL, title, and links here.
+    // =========================================================================
+    const SITE_CONFIG = {
+      title: "Ethan Anaya",
+      author: "Ethan Anaya",
+      mainSiteLabel: "GitHub",
+      mainSiteUrl: "https://github.com/EthanDupe",
+      githubUrl: "https://github.com/EthanDupe"
+    };
+
+    // =========================================================================
+    // POSTS — Add new posts here, or use the built-in Write tab to export
+    // an updated index.html ready to upload to GitHub.
+    // =========================================================================
+    /* POSTS_START */
+    const INITIAL_POSTS = [
+      {
+        slug: "how-this-blog-works",
+        title: "How this blog works",
+        date: "2026-11-23",
+        tags: ["meta", "web"],
+        summary: "A single-file static blog built for GitHub Pages with Markdown support and a built-in editor.",
+        content: `This entire site lives in a single \`index.html\` file with no build step, no framework bloat, and no external JavaScript dependencies.
+
+## Adding a new post
+
+You have two ways to publish:
+
+1. Open the **Write** tab in the header, write your post in Markdown, and click **Export index.html** to download an updated file you can upload straight to GitHub.
+2. Or click **Copy Post Object** in the editor and paste it at the top of the \`INITIAL_POSTS\` array inside \`index.html\`.
+
+## Supported Markdown
+
+- Headings (\`##\` and \`###\`)
+- **Bold**, *italic*, ~~strikethrough~~, and \`inline code\`
+- Links like [GitHub](https://github.com/EthanDupe) and images
+- Bullet lists, numbered lists, and blockquotes
+
+> Simple tools last longer. Keep everything readable and easy to edit.
+
+\`\`\`js
+// Example code block with one-click copy
+function greet(name) {
+  return \`Hello, \${name}\`;
+}
+\`\`\`
+
+To link this blog back to your main site, edit \`SITE_CONFIG\` near the bottom of \`index.html\`.`
+      },
+      {
+        slug: "first-project-note",
+        title: "Starter note: formatting & code",
+        date: "2026-11-20",
+        tags: ["notes", "projects"],
+        summary: "A quick reference post showing how headings, lists, and technical notes look in the reader.",
+        content: `Delete or edit this starter post whenever you are ready to publish your own writing.
+
+### Why a static single-file setup?
+
+- Loads instantly on phones and desktops.
+- Works on GitHub Pages with zero configuration.
+- Easy to drop into a \`/blog\` folder on an existing site or host as its own repository.
+
+\`\`\`bash
+# Optional local preview if you ever run it on your own machine
+python3 -m http.server 8000
+\`\`\`
+
+Every post gets its own shareable URL using hash routing (like \`#/post/your-slug\`).`
+      }
+    ];
+    /* POSTS_END */
+
+    const STORAGE_KEY = 'ethan_blog_posts_v1';
+    const THEME_KEY = 'ethan_blog_theme_v1';
+
+    let state = {
+      posts: [],
+      search: '',
+      activeTag: 'all',
+      editorMode: 'write',
+      editingSlug: null
+    };
+
+    // Safe localStorage helpers
+    function storageGet(key) {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    }
+    function storageSet(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+
+    function loadPosts() {
+      const saved = storageGet(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            state.posts = parsed;
+            return;
+          }
+        } catch (e) {}
+      }
+      state.posts = INITIAL_POSTS.map(p => ({ ...p, tags: [...p.tags] }));
+    }
+
+    function savePosts() {
+      storageSet(STORAGE_KEY, JSON.stringify(state.posts));
+    }
+
+    // Theme
+    function initTheme() {
+      const saved = storageGet(THEME_KEY);
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      applyTheme(theme);
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      storageSet(THEME_KEY, theme);
+      const btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.innerHTML = theme === 'dark'
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      }
+    }
+
+    // Utilities
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function slugify(text) {
+      return String(text || '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-') || 'untitled-post';
+    }
+
+    function formatShortDate(iso) {
+      const parts = String(iso || '').split('-');
+      if (parts.length !== 3) return iso || '';
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const m = months[parseInt(parts[1], 10) - 1] || parts[1];
+      const d = String(parseInt(parts[2], 10)).padStart(2, '0');
+      return `${m}${d}`;
+    }
+
+    function formatFullDate(iso) {
+      const parts = String(iso || '').split('-');
+      if (parts.length !== 3) return iso || '';
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const m = months[parseInt(parts[1], 10) - 1] || parts[1];
+      return `${m}${parseInt(parts[2], 10)}, ${parts[0]}`; }  function readingTime(text) { const words = String(text \vert{}\vert{} '').trim().split(/\s+/).filter(Boolean).length; const mins = Math.max(1, Math.round(words / 210)); return `${mins} min read`;
+    }
+
+    function sortedPosts() {
+      return [...state.posts].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    function copyText(text, successMsg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(successMsg)).catch(() => fallbackCopy(text, successMsg));
+      } else {
+        fallbackCopy(text, successMsg);
+      }
+    }
+
+    function fallbackCopy(text, successMsg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (e) {
+        showToast('Could not copy automatically');
+      }
+      document.body.removeChild(ta);
+    }
+
+    // Minimal, safe Markdown renderer
+    function renderInline(raw) {
+      let s = escapeHtml(raw);
+      const codeSlots = [];
+      s = s.replace(/`([^`]+)`/g, (_, code) => {
+        const idx = codeSlots.length;
+        codeSlots.push(`<code>${code}</code>`);
+        return `@@CODE${idx}@@`;
+      });
+      s = s.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+      s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+\vert{}#\/[^\s)]+)\)/g, (_, label, url) => {
+        const ext = url.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : '';
+        return `<a href="${url}"${ext}>${label}</a>`;
+      });
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+      s = s.replace(/@@CODE(\d+)@@/g, (_, i) => codeSlots[Number(i)]);
+      return s;
+    }
+
+    function renderMarkdown(md) {
+      const lines = String(md || '').replace(/\r\n/g, '\n').split('\n');
+      let html = '';
+      let i = 0;
+
+      while (i < lines.length) {
+        const line = lines[i];
+
+        // Fenced code block
+        if (/^```/.test(line.trim())) {
+          const lang = line.trim().slice(3).trim() || 'text';
+          const codeLines = [];
+          i++;
+          while (i < lines.length && !/^```/.test(lines[i].trim())) {
+            codeLines.push(lines[i]);
+            i++;
+          }
+          i++;
+          const codeText = codeLines.join('\n');
+          html += `<div class="code-block"><div class="code-header"><span>${escapeHtml(lang)}</span><button type="button" class="copy-code-btn" data-copy-code="${encodeURIComponent(codeText)}">Copy</button></div><pre><code>${escapeHtml(codeText)}</code></pre></div>`;
+          continue;
+        }
+
+        // Blank line
+        if (!line.trim()) {
+          i++;
+          continue;
+        }
+
+        // Headings
+        const hMatch = line.match(/^(#{1,3})\s+(.+)$/);
+        if (hMatch) {
+          const level = Math.min(3, Math.max(2, hMatch[1].length));
+          html += `<h${level}>${renderInline(hMatch[2])}</h${level}>`;
+          i++;
+          continue;
+        }
+
+        // Horizontal rule
+        if (/^(-{3,}|\*{3,})$/.test(line.trim())) {
+          html += '<hr>';
+          i++;
+          continue;
+        }
+
+        // Blockquote
+        if (/^>\s?/.test(line)) {
+          const qLines = [];
+          while (i < lines.length && /^>\s?/.test(lines[i])) {
+            qLines.push(lines[i].replace(/^>\s?/, ''));
+            i++;
+          }
+          html += `<blockquote><p>${qLines.map(renderInline).join('<br>')}</p></blockquote>`;
+          continue;
+        }
+
+        // Unordered list
+        if (/^[-*+]\s+/.test(line)) {
+          html += '<ul>';
+          while (i < lines.length && /^[-*+]\s+/.test(lines[i])) {
+            html += `<li>${renderInline(lines[i].replace(/^[-*+]\s+/, ''))}</li>`;
+            i++;
+          }
+          html += '</ul>';
+          continue;
+        }
+
+        // Ordered list
+        if (/^\d+\.\s+/.test(line)) {
+          html += '<ol>';
+          while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
+            html += `<li>${renderInline(lines[i].replace(/^\d+\.\s+/, ''))}</li>`;
+            i++;
+          }
+          html += '</ol>';
+          continue;
+        }
+
+        // Paragraph
+        const pLines = [];
+        while (
+          i < lines.length &&
+          lines[i].trim() &&
+          !/^(#{1,3}\s+|```|>\s?|[-*+]\s+|\d+\.\s+|-{3,}$|\*{3,}$)/.test(lines[i].trim())
+        ) {
+          pLines.push(lines[i]);
+          i++;
+        }
+        html += `<p>${pLines.map(renderInline).join(' ')}</p>`;
+      }
+
+      return html;
+    }
+
+    // Export full self-contained index.html with current posts baked in
+    function exportIndexHtml() {
+      const cleanPosts = sortedPosts().map(({ slug, title, date, tags, summary, content }) => ({
+        slug, title, date, tags, summary, content
+      }));
+      const serialized = JSON.stringify(cleanPosts, null, 2)
+        .split('\n')
+        .map((l, idx) => (idx === 0 ? l : '    ' + l))
+        .join('\n');
+
+      const docHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+      const updated = docHtml.replace(
+        /\/\* POSTS_START \*\/[\s\S]*?\/\* POSTS_END \*\//,
+        `/* POSTS_START */\n    const INITIAL_POSTS = ${serialized};\n    /* POSTS_END */`
+      );
+
+      const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast('Downloaded updated index.html');
+    }
+
+    // Views
+    function setActiveNav(name) {
+      document.querySelectorAll('[data-nav]').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('data-nav') === name);
+      });
+    }
+
+    function renderHome() {
+      setActiveNav('home');
+      document.title = `${SITE_CONFIG.title} — Blog`;
+
+      const posts = sortedPosts();
+      const tagCounts = {};
+      posts.forEach(p => (p.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+      const allTags = Object.keys(tagCounts).sort();
+
+      const q = state.search.trim().toLowerCase();
+      const filtered = posts.filter(p => {
+        const matchesTag = state.activeTag === 'all' || (p.tags || []).includes(state.activeTag);
+        if (!matchesTag) return false;
+        if (!q) return true;
+        return (
+          p.title.toLowerCase().includes(q) ||
+          (p.summary || '').toLowerCase().includes(q) ||
+          (p.content || '').toLowerCase().includes(q) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(q))
+        );
+      });
+
+      const byYear = {};
+      filtered.forEach(p => {
+        const y = (p.date || '').slice(0, 4) || 'Other';
+        if (!byYear[y]) byYear[y] = [];
+        byYear[y].push(p);
+      });
+      const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a));
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <section class="controls" aria-label="Filter posts">
+          <div class="search-wrap">
+            <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="search-input" class="search-input" placeholder="Search posts..." value="${escapeHtml(state.search)}" aria-label="Search posts">
+            <button type="button" id="search-clear" class="search-clear ${state.search ? 'visible' : ''}" aria-label="Clear search">&times;</button>
+          </div>
+          <div class="tags-row" role="group" aria-label="Filter by tag">
+            <button type="button" class="tag-btn ${state.activeTag === 'all' ? 'active' : ''}" data-tag="all">all (${posts.length})</button>
+            ${allTags.map(t => `<button type="button" class="tag-btn ${state.activeTag === t ? 'active' : ''}" data-tag="${escapeHtml(t)}">#${escapeHtml(t)} (${tagCounts[t]})</button>`).join('')}
+          </div>
+        </section>
+
+        <section id="post-list-container">
+          ${renderPostGroups(years, byYear)}
+        </section>
+      `;
+
+      const searchInput = document.getElementById('search-input');
+      const clearBtn = document.getElementById('search-clear');
+
+      searchInput.addEventListener('input', e => {
+        state.search = e.target.value;
+        clearBtn.classList.toggle('visible', Boolean(state.search));
+        updatePostListOnly();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        state.search = '';
+        searchInput.value = '';
+        clearBtn.classList.remove('visible');
+        updatePostListOnly();
+        searchInput.focus();
+      });
+
+      app.querySelectorAll('.tag-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.activeTag = btn.getAttribute('data-tag');
+          renderHome();
+        });
+      });
+
+      bindClearFilters();
+    }
+
+    function renderPostGroups(years, byYear) {
+      if (years.length === 0) {
+        return `
+          <div class="empty-state">
+            <p>No posts match that filter.</p>
+            <button type="button" class="btn-secondary" id="reset-filters-btn">Show all posts</button>
+          </div>
+        `;
+      }
+
+      return years.map(year => `
+        <div class="year-group">
+          <h2 class="year-label">${escapeHtml(year)}</h2>
+          <ul class="post-list">
+            ${byYear[year].map(p => `
+              <li class="post-item">
+                <a href="#/post/${encodeURIComponent(p.slug)}" class="post-link">
+                  <time class="post-date" datetime="${escapeHtml(p.date)}">${escapeHtml(formatShortDate(p.date))}</time>
+                  <div>
+                    <h3 class="post-title">${escapeHtml(p.title)}${p.isLocal ? '<span class="draft-badge">local</span>' : ''}</h3>
+                    ${p.summary ? `<p class="post-excerpt">${escapeHtml(p.summary)}</p>` : ''}
+                    <div class="post-meta-inline">
+                      <span>${escapeHtml(readingTime(p.content))}</span>
+                      ${(p.tags || []).map(t => `<span class="post-tag-pill">#${escapeHtml(t)}</span>`).join('')}
+                    </div>
+                  </div>
+                </a>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+    }
+
+    function updatePostListOnly() {
+      const posts = sortedPosts();
+      const q = state.search.trim().toLowerCase();
+      const filtered = posts.filter(p => {
+        const matchesTag = state.activeTag === 'all' || (p.tags || []).includes(state.activeTag);
+        if (!matchesTag) return false;
+        if (!q) return true;
+        return (
+          p.title.toLowerCase().includes(q) ||
+          (p.summary || '').toLowerCase().includes(q) ||
+          (p.content || '').toLowerCase().includes(q) ||
+          (p.tags || []).some(t => t.toLowerCase().includes(q))
+        );
+      });
+      const byYear = {};
+      filtered.forEach(p => {
+        const y = (p.date || '').slice(0, 4) || 'Other';
+        if (!byYear[y]) byYear[y] = [];
+        byYear[y].push(p);
+      });
+      const years = Object.keys(byYear).sort((a, b) => b.localeCompare(a));
+      const container = document.getElementById('post-list-container');
+      if (container) {
+        container.innerHTML = renderPostGroups(years, byYear);
+        bindClearFilters();
+      }
+    }
+
+    function bindClearFilters() {
+      const resetBtn = document.getElementById('reset-filters-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          state.search = '';
+          state.activeTag = 'all';
+          renderHome();
+        });
+      }
+    }
+
+    function renderPost(slug) {
+      setActiveNav('home');
+      const posts = sortedPosts();
+      const idx = posts.findIndex(p => p.slug === slug);
+      const app = document.getElementById('app');
+
+      if (idx === -1) {
+        document.title = `Not Found — ${SITE_CONFIG.title}`;
+        app.innerHTML = `
+          <div class="empty-state">
+            <p>That post doesn't exist.</p>
+            <a href="#/" class="btn-secondary">Back to all posts</a>
+          </div>
+        `;
+        return;
+      }
+
+      const post = posts[idx];
+      const newer = idx > 0 ? posts[idx - 1] : null;
+      const older = idx < posts.length - 1 ? posts[idx + 1] : null;
+      document.title = `${post.title} — ${SITE_CONFIG.title}`;
+
+      app.innerHTML = `
+        <a href="#/" class="back-link">&larr; All posts</a>
+        <article>
+          <header class="article-header">
+            <h1 class="article-title">${escapeHtml(post.title)}</h1>
+            <div class="article-meta">
+              <div class="article-meta-left">
+                <time datetime="${escapeHtml(post.date)}">${escapeHtml(formatFullDate(post.date))}</time>
+                <span>&middot;</span>
+                <span>${escapeHtml(readingTime(post.content))}</span>
+                ${(post.tags || []).map(t => `<a href="#/" class="post-tag-pill" data-jump-tag="${escapeHtml(t)}">#${escapeHtml(t)}</a>`).join('')}
+              </div>
+              <div class="article-actions">
+                <button type="button" class="btn-ghost" id="edit-post-btn">Edit</button>
+              </div>
+            </div>
+          </header>
+          <div class="prose">${renderMarkdown(post.content)}</div>
+        </article>
+
+        <nav class="article-footer-nav" aria-label="Post navigation">
+          <div>
+            ${older ? `<a href="#/post/${encodeURIComponent(older.slug)}" class="pager-link"><span class="pager-label">&larr; Older</span><span class="pager-title">${escapeHtml(older.title)}</span></a>` : ''}
+          </div>
+          <div>
+            ${newer ? `<a href="#/post/${encodeURIComponent(newer.slug)}" class="pager-link next"><span class="pager-label">Newer &rarr;</span><span class="pager-title">${escapeHtml(newer.title)}</span></a>` : ''}
+          </div>
+        </nav>
+      `;
+
+      document.getElementById('edit-post-btn').addEventListener('click', () => {
+        state.editingSlug = post.slug;
+        window.location.hash = '#/write';
+      });
+
+      app.querySelectorAll('[data-jump-tag]').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          state.activeTag = link.getAttribute('data-jump-tag');
+          state.search = '';
+          window.location.hash = '#/';
+        });
+      });
+
+      app.querySelectorAll('[data-copy-code]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const code = decodeURIComponent(btn.getAttribute('data-copy-code'));
+          copyText(code, 'Code copied');
+        });
+      });
+
+      window.scrollTo(0, 0);
+    }
+
+    function renderEditor() {
+      setActiveNav('write');
+      const existing = state.editingSlug ? state.posts.find(p => p.slug === state.editingSlug) : null;
+      const today = new Date().toISOString().slice(0, 10);
+
+      document.title = `${existing ? 'Edit Post' : 'Write Post'} — ${SITE_CONFIG.title}`;
+
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="editor-head">
+          <div>
+            <h1>${existing ? 'Edit post' : 'New post'}</h1>
+            <p class="editor-note">Save locally to preview, then export <code>index.html</code> to upload to GitHub.</p>
+          </div>
+          ${existing ? `<button type="button" class="btn-ghost" id="new-post-reset">+ Start blank</button>` : ''}
+        </div>
+
+        <form id="post-form">
+          <div class="field-grid">
+            <div class="field">
+              <label for="f-title">Title</label>
+              <input id="f-title" class="input" type="text" required placeholder="Post title" value="${escapeHtml(existing ? existing.title : '')}">
+            </div>
+            <div class="field">
+              <label for="f-date">Date</label>
+              <input id="f-date" class="input" type="date" required value="${escapeHtml(existing ? existing.date : today)}">
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label for="f-summary">Short summary (optional)</label>
+              <input id="f-summary" class="input" type="text" placeholder="One-line summary for the post list" value="${escapeHtml(existing ? (existing.summary || '') : '')}">
+            </div>
+            <div class="field">
+              <label for="f-tags">Tags (comma separated)</label>
+              <input id="f-tags" class="input" type="text" placeholder="code, notes" value="${escapeHtml(existing ? (existing.tags || []).join(', ') : '')}">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="editor-toolbar">
+              <div class="mode-tabs">
+                <button type="button" class="btn-ghost ${state.editorMode === 'write' ? 'active' : ''}" data-mode="write">Write</button>
+                <button type="button" class="btn-ghost ${state.editorMode === 'preview' ? 'active' : ''}" data-mode="preview">Preview</button>
+              </div>
+              <div class="fmt-btns" id="fmt-btns" style="${state.editorMode === 'preview' ? 'display:none' : ''}">
+                <button type="button" class="btn-ghost" data-fmt="h2">H2</button>
+                <button type="button" class="btn-ghost" data-fmt="bold">Bold</button>
+                <button type="button" class="btn-ghost" data-fmt="italic">Italic</button>
+                <button type="button" class="btn-ghost" data-fmt="code">Code</button>
+                <button type="button" class="btn-ghost" data-fmt="quote">Quote</button>
+                <button type="button" class="btn-ghost" data-fmt="link">Link</button>
+              </div>
+            </div>
+            <textarea id="f-content" class="textarea" placeholder="Write in Markdown..." style="${state.editorMode === 'preview' ? 'display:none' : ''}">${escapeHtml(existing ? existing.content : '')}</textarea>
+            <div id="f-preview" class="editor-preview prose" style="${state.editorMode === 'write' ? 'display:none' : ''}"></div>
+          </div>
+
+          <div class="editor-actions">
+            <button type="submit" class="btn-primary">${existing ? 'Update post' : 'Save post'}</button>
+            <button type="button" class="btn-secondary" id="export-html-btn">Export index.html</button>
+            <button type="button" class="btn-secondary" id="copy-json-btn">Copy post JS</button>
+            ${existing ? `<button type="button" class="btn-danger" id="delete-post-btn">Delete</button>` : ''}
+          </div>
+
+          ${existing ? `
+            <div class="confirm-bar" id="delete-confirm">
+              <span>Delete "${escapeHtml(existing.title)}"?</span>
+              <button type="button" class="btn-danger" id="confirm-delete-yes">Yes, delete</button>
+              <button type="button" class="btn-ghost" id="confirm-delete-no">Cancel</button>
+            </div>
+          ` : ''}
+        </form>
+      `;
+
+      const titleEl = document.getElementById('f-title');
+      const dateEl = document.getElementById('f-date');
+      const summaryEl = document.getElementById('f-summary');
+      const tagsEl = document.getElementById('f-tags');
+      const contentEl = document.getElementById('f-content');
+      const previewEl = document.getElementById('f-preview');
+      const fmtBtns = document.getElementById('fmt-btns');
+
+      if (state.editorMode === 'preview') {
+        previewEl.innerHTML = renderMarkdown(contentEl.value) || '<p style="color:var(--muted)">Nothing to preview yet.</p>';
+      }
+
+      app.querySelectorAll('[data-mode]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.editorMode = btn.getAttribute('data-mode');
+          app.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('active', b === btn));
+          if (state.editorMode === 'preview') {
+            previewEl.innerHTML = renderMarkdown(contentEl.value) || '<p style="color:var(--muted)">Nothing to preview yet.</p>';
+            contentEl.style.display = 'none';
+            previewEl.style.display = 'block';
+            fmtBtns.style.display = 'none';
+          } else {
+            contentEl.style.display = 'block';
+            previewEl.style.display = 'none';
+            fmtBtns.style.display = 'flex';
+            contentEl.focus();
+          }
+        });
+      });
+
+      app.querySelectorAll('[data-fmt]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const type = btn.getAttribute('data-fmt');
+          const start = contentEl.selectionStart;
+          const end = contentEl.selectionEnd;
+          const selected = contentEl.value.slice(start, end);
+          let insert = '';
+          if (type === 'h2') insert = `\n## ${selected || 'Heading'}\n`;
+          if (type === 'bold') insert = `**${selected || 'bold text'}**`;
+          if (type === 'italic') insert = `*${selected || 'italic text'}*`;
+          if (type === 'code') insert = selected.includes('\n') ? `\n\`\`\`\n${selected}\n\`\`\`\n` : `\`${selected || 'code'}\``;
+          if (type === 'quote') insert = `\n> ${selected || 'Quote'}\n`;
+          if (type === 'link') insert = `[${selected || 'link text'}](https://example.com)`;
+          contentEl.value = contentEl.value.slice(0, start) + insert + contentEl.value.slice(end);
+          contentEl.focus();
+          contentEl.setSelectionRange(start + insert.length, start + insert.length);
+        });
+      });
+
+      function buildPostObject() {
+        const title = titleEl.value.trim();
+        const date = dateEl.value || today;
+        const summary = summaryEl.value.trim();
+        const tags = tagsEl.value.split(',').map(t => t.trim().toLowerCase().replace(/^#/, '')).filter(Boolean);
+        const content = contentEl.value.trim();
+        let slug = existing ? existing.slug : slugify(title);
+        if (!existing && state.posts.some(p => p.slug === slug)) {
+          slug = `${slug}-${date}`;
+        }
+        return { slug, title, date, tags, summary, content, isLocal: true };
+      }
+
+      document.getElementById('post-form').addEventListener('submit', e => {
+        e.preventDefault();
+        if (!titleEl.value.trim() || !contentEl.value.trim()) {
+          showToast('Add a title and content first');
+          return;
+        }
+        const post = buildPostObject();
+        if (existing) {
+          const i = state.posts.findIndex(p => p.slug === existing.slug);
+          if (i !== -1) state.posts[i] = post;
+        } else {
+          state.posts.unshift(post);
+        }
+        savePosts();
+        state.editingSlug = null;
+        showToast(existing ? 'Post updated' : 'Post saved');
+        window.location.hash = `#/post/${encodeURIComponent(post.slug)}`;
+      });
+
+      document.getElementById('export-html-btn').addEventListener('click', () => {
+        if (titleEl.value.trim() && contentEl.value.trim()) {
+          const post = buildPostObject();
+          const i = state.posts.findIndex(p => p.slug === post.slug);
+          if (i !== -1) state.posts[i] = post;
+          else state.posts.unshift(post);
+          savePosts();
+        }
+        exportIndexHtml();
+      });
+
+      document.getElementById('copy-json-btn').addEventListener('click', () => {
+        if (!titleEl.value.trim()) {
+          showToast('Enter a title first');
+          return;
+        }
+        const { slug, title, date, tags, summary, content } = buildPostObject();
+        copyText(JSON.stringify({ slug, title, date, tags, summary, content }, null, 2) + ',', 'Post object copied');
+      });
+
+      const resetBtn = document.getElementById('new-post-reset');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          state.editingSlug = null;
+          state.editorMode = 'write';
+          renderEditor();
+        });
+      }
+
+      const delBtn = document.getElementById('delete-post-btn');
+      const delBar = document.getElementById('delete-confirm');
+      if (delBtn && delBar) {
+        delBtn.addEventListener('click', () => delBar.classList.add('visible'));
+        document.getElementById('confirm-delete-no').addEventListener('click', () => delBar.classList.remove('visible'));
+        document.getElementById('confirm-delete-yes').addEventListener('click', () => {
+          state.posts = state.posts.filter(p => p.slug !== existing.slug);
+          savePosts();
+          state.editingSlug = null;
+          showToast('Post deleted');
+          window.location.hash = '#/';
+        });
+      }
+    }
+
+    // Router
+    function route() {
+      const hash = window.location.hash || '#/';
+      if (hash.startsWith('#/post/')) {
+        const slug = decodeURIComponent(hash.slice('#/post/'.length));
+        renderPost(slug);
+      } else if (hash === '#/write') {
+        renderEditor();
+      } else {
+        state.editingSlug = null;
+        renderHome();
+      }
+    }
+
+    // Init
+    function init() {
+      document.getElementById('site-title').textContent = SITE_CONFIG.title;
+      const mainLink = document.getElementById('main-site-link');
+      mainLink.textContent = SITE_CONFIG.mainSiteLabel;
+      mainLink.href = SITE_CONFIG.mainSiteUrl;
+      document.getElementById('footer-github').href = SITE_CONFIG.githubUrl;
+      document.getElementById('footer-copy').textContent = `© ${new Date().getFullYear()} ${SITE_CONFIG.author}`;
+
+      initTheme();
+      loadPosts();
+
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+
+      window.addEventListener('hashchange', route);
+      route();
+    }
+
+    init();
+  </script>
+</body>
+</html>
